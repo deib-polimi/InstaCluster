@@ -1,5 +1,6 @@
 #!/bin/bash
 #discriminate if slave or master by user provided meta-data when launching the instance
+arguments=$(wget -qO- http://instance-data/latest/user-data/)
 if [ -z "$arguments"]; then
   echo "I'm a Slave Instance"
   bash /home/admin/scripts/slave_setup.bsh
