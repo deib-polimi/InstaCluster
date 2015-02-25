@@ -1,0 +1,12 @@
+#!/bin/bash
+#discriminate if slave or master by user provided meta-data when launching the instance
+if [ -z "$arguments"]; then
+  echo "I'm a Slave Instance"
+  bash /home/admin/scripts/slave_setup.bsh
+else
+  echo "I'm the Master Instance"
+  bash /home/admin/scripts/master_setup.bsh
+fi
+
+
+

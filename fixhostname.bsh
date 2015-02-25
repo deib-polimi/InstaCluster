@@ -1,0 +1,4 @@
+#!/bin/bash
+rm /etc/hostname
+echo $1".mbarenet.it" > /etc/hostname
+service hostname restart
