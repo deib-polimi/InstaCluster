@@ -12,6 +12,6 @@
 # By default this script does nothing.
 
 #check if any argument has been passed when creating the instance
-#copying the template file in thhe right plate
-bash /home/admin/scritps/setup.bsh > /home/admin/setup.log 2>&1
+#copying the template file in the right plate
+bash /home/admin/scripts/setup.bsh > /home/admin/setup.log 2>&1
 exit 0
