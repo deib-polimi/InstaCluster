@@ -49,13 +49,13 @@ cat /etc/hosts | grep slave |  grep -v \#  |  xargs ssh-keyscan -H -t ecdsa | su
 echo "updated fingerprints of slaves"
 
 
-echo "distributed host file"
+echo "distributing host file"
 #distribute the hosts file to slaves to fix ips
-ansible ansible_cluster_name -m copy -a "src=/etc/hosts dest=/etc/hosts" --sudo
+ansible $ansible_cluster_name -m copy -a "src=/etc/hosts dest=/etc/hosts" --sudo
 
 echo "distributing fingerprints"
 #distribute the  known host file so that everyone knows the correct fingerprints
-ansible ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc/ssh/ssh_known_hosts" --sudo
+ansible $ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc/ssh/ssh_known_hosts" --sudo
 
 echo "assigning slaves their hostname"
 #if you don't understand this talk to Srdjan..
@@ -64,7 +64,7 @@ cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 | xargs -I J ssh J su
 
 echo "setting up Ambari to look at the new hostname"
 #restart the Ambari agent to reconnect to the master with the new hostname
-ansible ansible_cluster_name -a "ambari-agent restart" --sudo
+ansible $ansible_cluster_name -a "ambari-agent restart" --sudo
 
 echo "install ambari server and start it"
 sudo apt-get install -y ambari-server
