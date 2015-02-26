@@ -2,12 +2,15 @@
 ansible_cluster_name="cluster";
 
 #copy the template hosts file over the current hosts file
-sudo cp /etc/hosts.template /etc/hosts 
-echo "hosts template applied"
+sudo cp /etc/hosts.template /etc/hosts.new
+echo "hosts template copied" 
 
 #get the IP of the instance and update the host file
-wget -qO- http://instance-data/latest/meta-data/local-ipv4 | xargs -I RES sudo sed 's/local_ip/RES/' -i /etc/hosts 
+wget -qO- http://instance-data/latest/meta-data/local-ipv4 | xargs -I RES sudo sed 's/local_ip/RES/' -i /etc/hosts.new
 echo "master IP updated on hosts file"
+
+sudo cp /etc/hosts.new /etc/hosts
+echo "fixed hosts applied" 
 
 #fix the hostname to master.mbarenet.it
 sudo bash /home/admin/scripts/fixhostname.bsh master 
@@ -21,7 +24,7 @@ echo "access key and secret key retrieved"
 #count the number of slaves to assign incremental names
 counter=1;
 #gets the IPs of the machines running in the same region and assign names as slaves. Updates the hosts file
-for ip in $(ec2-describe-instances --region us-west-1 | grep PRIVATEIPADDRESS | cut -f2 | grep -v `wget -qO- http://instance-data/latest/meta-data/local-ipv4`);
+for ip in $(ec2-describe-instances --region us-west-1 -O $AWS_ACCESS_KEY | grep PRIVATEIPADDRESS | cut -f2 | grep -v `wget -qO- http://instance-data/latest/meta-data/local-ipv4`);
 do
         echo "$ip slave$counter.mbarenet.it slave$counter" | sudo tee --append /etc/hosts
 		echo "added slave $counter to the host file"
