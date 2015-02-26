@@ -48,6 +48,19 @@ echo "updated Ansible configuration"
 cat /etc/hosts | grep slave |  grep -v \#  |  xargs ssh-keyscan -H -t ecdsa | sudo tee -a /etc/ssh/ssh_known_hosts
 echo "updated fingerprints of slaves"
 
+#create the new keypair and put it in the ubuntu user
+ssh-keygen -t rsa -N "" -f /home/ubuntu/id_rsa
+sudo mv /home/ubuntu/id_rsa /home/ubuntu/.ssh/id_rsa
+sudo mv /home/ubuntu/id_rsa.pub /home/ubuntu/.ssh/id_rsa.pub
+
+#copy over to slaves the public key and update the authorized keys with the script. It also removes the temporary user
+echo "copying and installing public key to slaves"
+for slave in $(cat /etc/hosts | grep slave |  grep -v \# ) 
+do
+	sudo sshpass -p "$AWS_ACCESS_KEY" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:~
+	sshpass -p "$AWS_ACCESS_KEY" ssh  tempuser@$slave update_key.bsh
+done
+
 
 echo "distributing host file"
 #distribute the hosts file to slaves to fix ips

@@ -7,6 +7,7 @@ cp ambari-agent.ini $script_folder
 cp master_setup.bsh $script_folder
 cp setup.bsh $script_folder
 cp slave_setup.bsh $script_folder
+cp update_key.bsh $script_folder
 
 sudo cp -f hosts.template /etc/
 sudo cp -f rc.local /etc/
