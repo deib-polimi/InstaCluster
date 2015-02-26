@@ -21,7 +21,7 @@ export AWS_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep 
 export AWS_SECRET_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_KEY | cut -d "=" -f2)
 export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 export EC2_HOME="/usr/local/ec2/ec2-api-tools-1.7.3.0"
-export PATH=$PATH:EC2_HOME/bin
+export PATH=$PATH:"$EC2_HOME"/bin
 
 echo "access key and secret key retrieved"
 
