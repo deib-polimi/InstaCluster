@@ -13,7 +13,7 @@ sudo cp /etc/hosts.new /etc/hosts
 echo "fixed hosts applied" 
 
 #fix the hostname to master.mbarenet.it
-sudo bash /home/admin/scripts/fixhostname.bsh master 
+sudo bash /home/ubuntu/scripts/fixhostname.bsh master 
 echo "hostname fixed"
 
 #get the access keys  for ec2 console
@@ -59,7 +59,7 @@ ansible $ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc
 
 echo "assigning slaves their hostname"
 #if you don't understand this talk to Srdjan..
-cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 | xargs -I J ssh J sudo bash /home/admin/scripts/fixhostname.bsh  J
+cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 | xargs -I J ssh J sudo bash /home/ubuntu/scripts/fixhostname.bsh  J
 
 
 echo "setting up Ambari to look at the new hostname"

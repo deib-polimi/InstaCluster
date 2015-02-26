@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "Installing ambari agent"
 sudo apt-get install -y ambari-agent
-sudo mv /home/admin/scripts/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini
+sudo mv /home/ubuntu/scripts/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini

@@ -3,10 +3,10 @@
 arguments=$(wget -qO- http://instance-data/latest/user-data/)
 if [ -z "$arguments"]; then
   echo "I'm a Slave Instance"
-  bash /home/admin/scripts/slave_setup.bsh
+  bash /home/ubuntu/scripts/slave_setup.bsh
 else
   echo "I'm the Master Instance"
-  bash /home/admin/scripts/master_setup.bsh
+  bash /home/ubuntu/scripts/master_setup.bsh
 fi
 
 
