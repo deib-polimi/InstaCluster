@@ -53,3 +53,12 @@ ansible cumpa -a "chmod -R +x /etc/spark/sbin" --sudo
 #create home folder (assumption, there exists at least 1 slave)
 ansible slave1 -a "sudo -u hdfs hdfs dfs -mkdir /user/ubuntu"
 ansible slave1 -a "sudo -u hdfs hdfs dfs -chown ubuntu /user/ubuntu"
+
+#add the slaves to the spark configuration
+cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 > $SPARK_HOME/conf/slaves
+
+#start the master and the slaves
+$SPARK_HOME/sbin/start-all.sh
+
+#start the jobserver (assumes that the spark job server is already in the image)
+/home/ubuntu/job-server/server_start.sh
