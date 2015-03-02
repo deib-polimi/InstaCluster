@@ -1,13 +1,30 @@
 #!/bin/bash
 #run this to install the scripts in the proper place in a "clean VM" (requirements software have to be installed for scripts to work)
-script_folder="/home/ubuntu/scripts/"
-cp fixhostname.bsh $script_folder
-cp hostnameEcho.bsh $script_folder
-cp ambari-agent.ini $script_folder
-cp master_setup.bsh $script_folder
-cp setup.bsh $script_folder
-cp slave_setup.bsh $script_folder
-cp update_key.bsh $script_folder
 
-sudo cp -f hosts.template /etc/
-sudo cp -f rc.local /etc/
+#copy the resources from repo
+sudo cp -f resources/hosts.template /etc/
+sudo cp -f script/rc.local /etc/
+sudo cp -rf resources/job-server /etc/
+
+## download spark
+wget http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz
+## extract it
+tar -xvf spark-1.2.0-bin-hadoop2.4.tgz
+## remove the archive
+rm spark-1.2.0-bin-hadoop2.4.tgz
+## move to etc
+sudo mv spark-1.2.0-bin-hadoop2.4 /etc/spark
+## set SPARK_HOME
+echo 'SPARK_HOME=/etc/spark' | sudo tee --append /etc/environment
+
+## copy the templates
+sudo cp /etc/spark/conf/spark-defaults.conf.template /etc/spark/conf/spark-defaults.conf
+sudo cp /etc/spark/conf/spark-env.sh.template /etc/spark/conf/spark-env.sh
+## enable logging
+echo 'spark.eventLog.enabled           true' | sudo tee --append /etc/spark/conf/spark-defaults.conf
+## set some JVM options
+echo 'spark.driver.extraJavaOptions -Dhdp.version=2.2.0.0-2041' | sudo tee --append /etc/spark/conf/spark-defaults.conf
+echo 'spark.yarn.am.extraJavaOptions -Dhdp.version=2.2.0.0-2041'  | sudo tee --append /etc/spark/conf/spark-defaults.conf
+
+## set the Web server port
+echo 'SPARK_MASTER_WEBUI_PORT=8888'  | sudo tee --append /etc/spark/conf/spark-env.sh
