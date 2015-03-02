@@ -10,23 +10,23 @@ PATH=$PATH:/var/lib/ambari-server/resources/scripts
 
 #modifying core-site
 #add the hadoop.proxyuser.hue.hosts property
-configs.sh -u admin -p modaclouds set master $cluster_name core-site "hadoop.proxyuser.hue.hosts" "*"
+configs.sh -u admin -p admin set master $cluster_name core-site "hadoop.proxyuser.hue.hosts" "*"
 
 #add the hadoop.proxyuser.hue.groups  property
-configs.sh -u admin -p modaclouds set master $cluster_name core-site "hadoop.proxyuser.hue.groups" "*"
+configs.sh -u admin -p admin set master $cluster_name core-site "hadoop.proxyuser.hue.groups" "*"
 
 #modifying mapred-site
 #add the jobtracker.thrift.address  property
-configs.sh -u admin -p modaclouds set master $cluster_name mapred-site "jobtracker.thrift.address" "0.0.0.0:9290"
+configs.sh -u admin -p admin set master $cluster_name mapred-site "jobtracker.thrift.address" "0.0.0.0:9290"
 #add the mapred.jobtracker.plugins  property
-configs.sh -u admin -p modaclouds set master $cluster_name mapred-site "mapred.jobtracker.plugins" "org.apache.hadoop.thriftfs.ThriftJobTrackerPlugin"
+configs.sh -u admin -p admin set master $cluster_name mapred-site "mapred.jobtracker.plugins" "org.apache.hadoop.thriftfs.ThriftJobTrackerPlugin"
 
 #modifying oozie-site
 #add the oozie.service.ProxyUserService.proxyuser.hue.hosts property
-configs.sh -u admin -p modaclouds set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.hosts" "*"
+configs.sh -u admin -p admin set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.hosts" "*"
 
 #add the oozie.service.ProxyUserService.proxyuser.hue.groups property
-configs.sh -u admin -p modaclouds set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.groups" "*"
+configs.sh -u admin -p admin set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.groups" "*"
 
 echo "Configuration updated, stopping services"
 #restarting services to update the configuration

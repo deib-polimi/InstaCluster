@@ -1,10 +1,14 @@
 #!/bin/bash
 #run this to install the scripts in the proper place in a "clean VM" (requirements software have to be installed for scripts to work)
 
+path=/home/ubuntu/HDP-amazon-scripts
+echo "REPO=$path" | sudo tee --append /etc/environment
+
+
 #copy the resources from repo
-sudo cp -f resources/hosts.template /etc/
-sudo cp -f script/rc.local /etc/
-sudo cp -rf resources/job-server /etc/
+sudo cp -f $path/resources/hosts.template /etc/
+sudo cp -f $path/script/rc.local /etc/
+sudo cp -rf $path/resources/job-server /etc/
 
 ## download spark
 wget http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz
@@ -28,3 +32,8 @@ echo 'spark.yarn.am.extraJavaOptions -Dhdp.version=2.2.0.0-2041'  | sudo tee --a
 
 ## set the Web server port
 echo 'SPARK_MASTER_WEBUI_PORT=8888'  | sudo tee --append /etc/spark/conf/spark-env.sh
+
+#change ownership
+sudo chown -R ubuntu /etc/spark
+sudo chmod -R +x /etc/spark/sbin 
+sudo chmod -R +x /etc/spark/bin
