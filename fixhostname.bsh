@@ -1,4 +1,0 @@
-#!/bin/bash
-rm /etc/hostname
-echo $1 > /etc/hostname
-service hostname restart
