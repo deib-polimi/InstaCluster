@@ -7,8 +7,8 @@ sudo cp /etc/hosts.template /etc/hosts.new
 echo "hosts template copied" 
 
 #get the IP of the instance and update the host file
-local_ip=wget -qO- http://instance-data/latest/meta-data/local-ipv4
-sudo sed 's/local_ip/$local_ip/' -i /etc/hosts.new
+local_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
+sudo sed "s/local_ip/$local_ip/" -i /etc/hosts.new
 echo "master IP updated on hosts file"
 
 sudo cp /etc/hosts.new /etc/hosts
@@ -24,10 +24,10 @@ export AWS_SECRET_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ 
 export AWS_DEFAULT_REGION=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_DEFAULT_REGION | cut -d "=" -f2)
 export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 echo "access key and secret key retrieved"
-
+export
 #Get only machines running in the same region 
-slaves_ips=aws ec2 describe-instances | jq '.Reservations[0].Instances | map(select(.State.Name=="running")) | map(.PrivateIpAddress) | map(select(. != "$local_ip"))[]'
-
+slaves_ips=$(aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(.PrivateIpAddress) | map(select(. != \"$local_ip\"))[]")
+echo "slaves_ips: $slaves_ips"
 #count the number of slaves to assign incremental names
 counter=1;
 #gets the IPs of the machines running in the same region and assign names as slaves. Updates the hosts file
@@ -43,7 +43,7 @@ done
 sudo rm /etc/ssh/ssh_known_hosts
 
 #populate the Ansible configuration file
-echo "[$ansible_cluster_name]" >  /etc/ansible/hosts
+echo "[$ansible_cluster_name]" | sudo tee --append /etc/ansible/hosts
 cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f2  | sudo tee -a /etc/ansible/hosts
 echo "updated Ansible configuration"
 
@@ -58,10 +58,10 @@ sudo mv /home/ubuntu/id_rsa.pub /home/ubuntu/.ssh/id_rsa.pub
 
 #copy over to slaves the public key and update the authorized keys with the script. It also removes the temporary user
 echo "copying and installing public key to slaves"
-for slave in $(cat /etc/hosts | grep slave |  grep -v \# ) 
+for slave in $(cat /etc/hosts | grep slave |  grep -v \# | cut -d " " -f2) 
 do
-	sudo sshpass -p "$AWS_ACCESS_KEY" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:~
-	sshpass -p "$AWS_ACCESS_KEY" ssh  tempuser@$slave update_key.bsh
+	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/ubuntu/.ssh/id_rsa.pub
+	sshpass -p "$AWS_ACCESS_KEY_ID" ssh  tempuser@$slave sudo bash $path/script/update_key.bsh
 done
 
 #revoke the keys (if selected by the user)

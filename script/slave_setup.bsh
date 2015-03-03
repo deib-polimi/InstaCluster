@@ -9,13 +9,10 @@ echo "tempuser:$AWS_ACCESS_KEY" | sudo chpasswd
 
 #enable password autentication for ssh
 sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+sudo service ssh restart
 
 #add tempuser to sudoers
 echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
-
-#copy the update_key script to tempuser folder
-sudo mv $path/script/update_key.bsh /home/tempuser/update_key.bsh
-
 
 echo "Installing ambari agent"
 wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
