@@ -67,6 +67,8 @@ Create an image from the running instance and use is as base for the cluster.
 
 ## Cluster Installation
 To install the cluster spawn a number of replicas of the previously created machine (a preconfigured one will come soon)
+giving as user provided data your AWS_ACCES_KEY_ID only (follow the syntax in sampleParameterFiles.txt).
+
 When machines have been started spawn another replica adding as user data a file with the same format of sampleParameterFiles.txt with the keys to access the aws cli tool. 
 
 ## Parameters needed for cluster installation
