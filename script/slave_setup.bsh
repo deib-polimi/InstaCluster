@@ -14,9 +14,13 @@ sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/
 echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
 
 #copy the update_key script to tempuser folder
-sudo mv update_key.bsh /home/tempuser/update_key.bsh
+sudo mv $path/script/update_key.bsh /home/tempuser/update_key.bsh
 
 
 echo "Installing ambari agent"
+wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
+sudo mv ambari.list /etc/apt/sources.list.d/
+sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD -y
+sudo apt-get update
 sudo apt-get install -y ambari-agent
 sudo mv $path/resources/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini
