@@ -60,6 +60,7 @@ sudo mv /home/ubuntu/id_rsa.pub /home/ubuntu/.ssh/id_rsa.pub
 echo "copying and installing public key to slaves"
 for slave in $(cat /etc/hosts | grep slave |  grep -v \# | cut -d " " -f2) 
 do
+	echo "working with $slave"
 	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/tempuser/id_rsa.pub
 	sshpass -p "$AWS_ACCESS_KEY_ID" ssh  tempuser@$slave sudo bash $path/script/update_key.bsh
 done
@@ -81,7 +82,9 @@ ansible $ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc
 
 echo "assigning slaves their hostname"
 #if you don't understand this talk to Srdjan..
-cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 | xargs -I J ssh J sudo bash $path/script/fixhostname.bsh  J
+#i don't 
+#do we really want this? for Web gui it is better to user AWS hostnames, if amabari setup manages to work with slave[1-n]
+#cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f2 | xargs -I J ssh J sudo bash $path/script/fixhostname.bsh  J
 
 
 echo "setting up Ambari to look at the new hostname"
@@ -89,6 +92,10 @@ echo "setting up Ambari to look at the new hostname"
 ansible $ansible_cluster_name -a "ambari-agent restart" --sudo
 
 echo "install ambari server and start it"
+wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
+sudo mv ambari.list /etc/apt/sources.list.d/
+sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD -y
+sudo apt-get update
 sudo apt-get install -y ambari-server
 sudo ambari-server setup -j $JAVA_HOME -s
 sudo ambari-server start
