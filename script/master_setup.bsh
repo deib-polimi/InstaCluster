@@ -60,13 +60,13 @@ sudo mv /home/ubuntu/id_rsa.pub /home/ubuntu/.ssh/id_rsa.pub
 echo "copying and installing public key to slaves"
 for slave in $(cat /etc/hosts | grep slave |  grep -v \# | cut -d " " -f2) 
 do
-	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/ubuntu/.ssh/id_rsa.pub
+	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/tempuser/id_rsa.pub
 	sshpass -p "$AWS_ACCESS_KEY_ID" ssh  tempuser@$slave sudo bash $path/script/update_key.bsh
 done
 
 #revoke the keys (if selected by the user)
 revoke_decision=$(wget -qO- http://instance-data/latest/user-data/ | grep REVOKE_KEYS | cut -d "=" -f2)
-if [$revoke_decision = "Yes"]
+if [ $revoke_decision = "Yes" ]
 then
  aws iam delete-access-key --access-key-id $AWS_ACCESS_KEY_ID
 fi
