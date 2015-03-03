@@ -4,10 +4,10 @@ path=/home/ubuntu/HDP-amazon-scripts
 arguments=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID)
 if [ -z "$arguments"]; then
   echo "I'm a Slave Instance"
-  bash $path/scripts/slave_setup.bsh
+  bash $path/script/slave_setup.bsh
 else
   echo "I'm the Master Instance"
-  bash $path/scripts/master_setup.bsh
+  bash $path/script/master_setup.bsh
 fi
 
 
