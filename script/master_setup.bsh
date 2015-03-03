@@ -1,4 +1,5 @@
 #!/bin/bash
+path=/home/ubuntu/HDP-amazon-scripts
 ansible_cluster_name="cluster";
 
 #copy the template hosts file over the current hosts file
@@ -14,7 +15,7 @@ sudo cp /etc/hosts.new /etc/hosts
 echo "fixed hosts applied" 
 
 #fix the hostname to master
-sudo bash /home/ubuntu/scripts/fixhostname.bsh master 
+sudo bash $path/scripts/fixhostname.bsh master 
 echo "hostname fixed"
 
 #get the access keys  for aws console
@@ -80,7 +81,7 @@ ansible $ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc
 
 echo "assigning slaves their hostname"
 #if you don't understand this talk to Srdjan..
-cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 | xargs -I J ssh J sudo bash /home/ubuntu/scripts/fixhostname.bsh  J
+cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 | xargs -I J ssh J sudo bash $path/scripts/fixhostname.bsh  J
 
 
 echo "setting up Ambari to look at the new hostname"

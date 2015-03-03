@@ -17,9 +17,15 @@ sudo apt-get install htop -y
 sudo apt-get install lynx -y
 sudo apt-get install unzip -y
 sudo apt-get install git -y
+
 #aws CLI
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
 unzip awscli-bundle.zip
 sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 rm -f awscli-bundle.zip 
 rm -rf awscli-bundle
+
+#jq
+wget http://stedolan.github.io/jq/download/linux64/jq
+sudo mv jq /usr/bin
+sudo chmod +x /usr/bin/jq

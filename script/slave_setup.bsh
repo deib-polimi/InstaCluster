@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #creating the temporary user
+path=/home/ubuntu/HDP-amazon-scripts
 echo "creating temporary user"
-AWS_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY | cut -d "=" -f2)
+AWS_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
 sudo useradd -d /home/tempuser -m tempuser
 echo "tempuser:$AWS_ACCESS_KEY" | sudo chpasswd
 
@@ -18,4 +19,4 @@ sudo mv update_key.bsh /home/tempuser/update_key.bsh
 
 echo "Installing ambari agent"
 sudo apt-get install -y ambari-agent
-sudo mv /home/ubuntu/scripts/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini
+sudo mv $path/resources/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini

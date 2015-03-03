@@ -1,12 +1,13 @@
 #!/bin/bash
 #discriminate if slave or master by user provided meta-data when launching the instance
-arguments=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_KEY)
+path=/home/ubuntu/HDP-amazon-scripts
+arguments=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID)
 if [ -z "$arguments"]; then
   echo "I'm a Slave Instance"
-  bash /home/ubuntu/scripts/slave_setup.bsh
+  bash $path/scripts/slave_setup.bsh
 else
   echo "I'm the Master Instance"
-  bash /home/ubuntu/scripts/master_setup.bsh
+  bash $path/scripts/master_setup.bsh
 fi
 
 
