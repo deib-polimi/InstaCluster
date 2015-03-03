@@ -7,7 +7,7 @@ run in two phases:
 
 1. After booting the VM - to discover and configure all the VMs of the cluster to be able to communicate 
 among each other and start Ambari server and agents on the master and slaves, respectively.
-2. After cluster installation - to set up Spark and Hue to work togeather with the projects from the Hadoop ecosystem 
+2. After cluster installation - to set up Spark (standalone) and Hue to work togeather with the projects from the Hadoop ecosystem 
 installed by Ambari.
 
 ## Structure of the repository
@@ -49,3 +49,29 @@ HDP-amazon-scripts/
   
   resources/
   
+  sampleParameterFile.txt - sample file to gives as user provided data when lanching an AMI in order to specify the needed parameters.
+  
+## Installation of the Scripts
+To build a new image from scratch we suggest to start from the official ubuntu 12.04 cloud image (the latest version supported by Ambari) with ami: ami-09ad494d but any other Ubuntu 12.04 image is fine. 
+Clone the repo in the machine and run 
+```
+bash installScripts.bsh
+```
+
+To install the prerequitite run 
+```
+bash install_prerequisite.bsh
+```
+
+Create an image from the running instance and use is as base for the cluster.
+
+## Cluster Installation
+To install the cluster spawn a number of replicas of the previously created machine (a preconfigured one will come soon)
+When machines have been started spawn another replica adding as user data a file with the same format of sampleParameterFiles.txt with the keys to access the aws cli tool. 
+
+## Parameters needed for cluster installation
+
+- AWS_ACCESS_KEY_ID  - your aws access key needed to query aws about runnign instances and discover slaves
+- AWS_SECRET_ACCESS_KEY - your aws secret key needed to query aws about runnign instances and discover slaves
+- AWS_DEFAULT_REGION - the region in which to look for slaves
+- REVOKE_KEYS - wether to revoke the key after the slave discovery (useful for many security reasons)
