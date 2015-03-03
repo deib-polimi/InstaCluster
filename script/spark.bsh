@@ -2,12 +2,14 @@
 # NOT TESTED #
 ##############
 
+path=/home/ubuntu/HDP-amazon-scripts
+
 #set the address of the namenode 
 namenode_ip=$(sh hue/get_configuration_parameter.sh hdfs-site dfs.namenode.http-address | cut -d ":" -f 1);
 
 # set up the configuration (assumption is that the NN is in $namenode)
 ## set the logging folder
-echo 'spark.eventLog.dir               hdfs://$namenode_ip:8020/user/ubuntu/spark-app-logs' | sudo tee --append /etc/spark/conf/spark-defaults.conf
+echo "spark.eventLog.dir               hdfs://$namenode_ip:8020/user/ubuntu/spark-app-logs" | sudo tee --append /etc/spark/conf/spark-defaults.conf
 
 #copy the yarn configuration (assumption is that there is at least one slave with installed yarn and hdfs)
 sudo mkdir /hadoop
@@ -41,4 +43,11 @@ cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 > $SPARK_HOME/conf/sl
 $SPARK_HOME/sbin/start-all.sh
 
 #start the jobserver (assumes that the spark job server is already in the image)
-../resources/job-server/server_start.sh
+$path/resources/job-server/server_start.sh
+
+
+#set the address of the namenode 
+historyserver_ip=$(sh hue/get_configuration_parameter.sh yarn-site yarn.log.server.url | cut -d ":" -f 2 | cut -d "/" -f 3);
+
+# set up the history server connection between YARN and SPARK
+echo "spark.yarn.historyServer.address 	       http://$historyserver_ip:8088" | sudo tee --append /etc/spark/conf/spark-defaults.conf
