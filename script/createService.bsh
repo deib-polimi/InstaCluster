@@ -1,0 +1,16 @@
+
+
+#depends on the stack version selected by the user
+path=/home/ubuntu/HDP-amazon-scripts
+ambari="/var/lib/ambari-server/resources/stacks/HDP/2.2/services"
+
+sudo mkdir $ambari/HUE
+sudo cp $path/resources/metainfo.xml.template $ambari/HUE/metainfo.xml
+
+sudo mkdir -p $ambari/HUE/package/scripts
+
+sudo cp $path/resources/master.py.template $ambari/HUE/package/scripts/master.py
+
+sudo service ambari-server restart
+
+curl -i -u srdjan:123 -H 'X-Requested-By: ambari' -X POST -d '{"CLUSTER_CURRENT_STATUS": "{\"clusterState\":\"CLUSTER_STARTED_5\"}" }' http://localhost:8080/api/v1/persist 
