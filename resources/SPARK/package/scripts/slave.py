@@ -4,11 +4,12 @@ import subprocess
 
 class Slave(Script):
   def install(self, env):
-    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker.sh")
+    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker.sh", shell=True)
   def stop(self, env):
-    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker_stop.sh")
+    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker_stop.sh", shell=True)
   def start(self, env):
-    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker_start.sh")
+    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker_start.sh", shell=True)
+    
   def status(self, env):
     print 'Status of the Sample Srv Slave';
   def configure(self, env):

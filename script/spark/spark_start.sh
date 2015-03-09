@@ -1,3 +1,5 @@
+#!/bin/bash
+
 path=/home/ubuntu/HDP-amazon-scripts
 
 #start the master and the slaves
