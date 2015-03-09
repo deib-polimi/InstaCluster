@@ -1,12 +1,15 @@
 import sys
 from resource_management import *
+
+import subprocess
+
 class Master(Script):
   def install(self, env):
-    print 'Install the Sample Srv Master';
+    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/hue/hue_server.sh")
   def stop(self, env):
-    print 'Stop the Sample Srv Master';
+    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/hue/hue_stop.sh")
   def start(self, env):
-    print 'Start the Sample Srv Master';
+    subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/hue/hue_start.sh")
      
   def status(self, env):
     print 'Status of the Sample Srv Master';

@@ -30,6 +30,7 @@ echo 'spark.eventLog.enabled           true' | sudo tee --append /etc/spark/conf
 echo 'spark.driver.extraJavaOptions -Dhdp.version=2.2.0.0-2041' | sudo tee --append /etc/spark/conf/spark-defaults.conf
 echo 'spark.yarn.am.extraJavaOptions -Dhdp.version=2.2.0.0-2041'  | sudo tee --append /etc/spark/conf/spark-defaults.conf
 
+
 ## set the Web server port
 echo 'SPARK_MASTER_WEBUI_PORT=8888'  | sudo tee --append /etc/spark/conf/spark-env.sh
 

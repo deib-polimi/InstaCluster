@@ -25,6 +25,18 @@
                     <osFamily>ubuntu12</osFamily>  <!-- note: use osType rather than osFamily for Ambari 1.5.0 and 1.5.1 -->
                 </osSpecific>
             </osSpecifics>
+	    <requiredServices>
+              <service>HDFS</service>
+	      <service>YARN</service>
+	      <service>MAPREDUCE2</service>
+	      <service>OOZIE</service>
+	      <service>SPARK</service>
+	    </requiredServices>
+	    <configuration-dependencies>
+              <config-type>core-site</config-type>
+              <config-type>mapred-site</config-type>
+              <config-type>oozie-site</config-type>
+	    </configuration-dependencies>
         </service>
     </services>
 </metainfo>

@@ -6,27 +6,29 @@ cluster_name="${cluster_name#\"}"
 echo "Cluster name detected from Ambari:"$cluster_name
 
 #exporting in the path the script to manipulate ambari configuration
-PATH=$PATH:/var/lib/ambari-server/resources/scripts
+#PATH=$PATH:/var/lib/ambari-server/resources/scripts
+path=/home/ubuntu/HDP-amazon-scripts
+
 
 #modifying core-site
 #add the hadoop.proxyuser.hue.hosts property
-configs.sh -u admin -p admin set master $cluster_name core-site "hadoop.proxyuser.hue.hosts" "*"
+$path/script/configs.sh -u admin -p admin set master $cluster_name core-site "hadoop.proxyuser.hue.hosts" "*"
 
 #add the hadoop.proxyuser.hue.groups  property
-configs.sh -u admin -p admin set master $cluster_name core-site "hadoop.proxyuser.hue.groups" "*"
+$path/script/configs.sh -u admin -p admin set master $cluster_name core-site "hadoop.proxyuser.hue.groups" "*"
 
 #modifying mapred-site
 #add the jobtracker.thrift.address  property
-configs.sh -u admin -p admin set master $cluster_name mapred-site "jobtracker.thrift.address" "0.0.0.0:9290"
+$path/script/configs.sh -u admin -p admin set master $cluster_name mapred-site "jobtracker.thrift.address" "0.0.0.0:9290"
 #add the mapred.jobtracker.plugins  property
-configs.sh -u admin -p admin set master $cluster_name mapred-site "mapred.jobtracker.plugins" "org.apache.hadoop.thriftfs.ThriftJobTrackerPlugin"
+$path/script/configs.sh -u admin -p admin set master $cluster_name mapred-site "mapred.jobtracker.plugins" "org.apache.hadoop.thriftfs.ThriftJobTrackerPlugin"
 
 #modifying oozie-site
 #add the oozie.service.ProxyUserService.proxyuser.hue.hosts property
-configs.sh -u admin -p admin set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.hosts" "*"
+$path/script/configs.sh -u admin -p admin set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.hosts" "*"
 
 #add the oozie.service.ProxyUserService.proxyuser.hue.groups property
-configs.sh -u admin -p admin set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.groups" "*"
+$path/script/configs.sh -u admin -p admin set master $cluster_name oozie-site "oozie.service.ProxyUserService.proxyuser.hue.groups" "*"
 
 echo "Configuration updated, stopping services"
 #restarting services to update the configuration

@@ -97,5 +97,17 @@ sudo mv ambari.list /etc/apt/sources.list.d/
 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD -y
 sudo apt-get update
 sudo apt-get install -y ambari-server
+
+ambari="/var/lib/ambari-server/resources/stacks/HDP/2.2/services"
+sudo cp -r $path/resources/HUE $ambari
+sudo cp -r $path/resources/SPARK $ambari
+
+
 sudo ambari-server setup -j $JAVA_HOME -s
+
+
+
+
 sudo ambari-server start
+
+
