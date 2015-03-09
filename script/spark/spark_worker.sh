@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # get spark master
 
 getHost(name){
