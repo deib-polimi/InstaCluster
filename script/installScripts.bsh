@@ -38,3 +38,7 @@ echo 'SPARK_MASTER_WEBUI_PORT=8888'  | sudo tee --append /etc/spark/conf/spark-e
 sudo chown -R ubuntu /etc/spark
 sudo chmod -R +x /etc/spark/sbin 
 sudo chmod -R +x /etc/spark/bin
+
+sudo chmod -R a+x spark
+sudo chmod -R a+x hue
+ 
