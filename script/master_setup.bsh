@@ -26,7 +26,7 @@ export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 echo "access key and secret key retrieved"
 export
 #Get only machines running in the same region 
-slaves_ips=$(aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(.PrivateIpAddress) | map(select(. != \"$local_ip\"))[]")
+slaves_ips=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(.PrivateIpAddress) | map(select(. != \"$local_ip\"))[]")
 echo "slaves_ips: $slaves_ips"
 #count the number of slaves to assign incremental names
 counter=1;
@@ -69,7 +69,7 @@ done
 revoke_decision=$(wget -qO- http://instance-data/latest/user-data/ | grep REVOKE_KEYS | cut -d "=" -f2)
 if [ $revoke_decision = "Yes" ]
 then
- aws iam delete-access-key --access-key-id $AWS_ACCESS_KEY_ID
+ /usr/local/bin/aws iam delete-access-key --access-key-id $AWS_ACCESS_KEY_ID
 fi
 
 echo "distributing host file"
