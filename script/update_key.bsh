@@ -7,6 +7,8 @@ sed -i '/ubuntu/d' /home/ubuntu/.ssh/authorized_keys
 sudo cat /home/tempuser/id_rsa.pub | sudo tee -a /home/ubuntu/.ssh/authorized_keys
 sudo mv /home/tempuser/id_rsa /home/ubuntu/.ssh
 sudo chown ubuntu /home/ubuntu/.ssh/id_rsa
+sudo chgrp ubuntu /home/ubuntu/.ssh/id_rsa
+
 
 #remove tempuser from sudoers
 sudo sed -i 's/tempuser ALL=(ALL) NOPASSWD:ALL//g' /etc/sudoers.d/90-cloudimg-ubuntu
