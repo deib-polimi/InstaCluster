@@ -62,6 +62,7 @@ for slave in $(cat /etc/hosts | grep slave |  grep -v \# | cut -d " " -f2)
 do
 	echo "working with $slave"
 	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/tempuser/id_rsa.pub
+	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa tempuser@$slave:/home/tempuser/id_rsa
 	sshpass -p "$AWS_ACCESS_KEY_ID" ssh  tempuser@$slave sudo bash $path/script/update_key.bsh
 done
 
