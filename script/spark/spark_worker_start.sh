@@ -1,4 +1,4 @@
 #!/bin/bash
 
 #start the slave
-$SPARK_HOME/sbin/start-slave.sh
+sudo $SPARK_HOME/sbin/start-slave.sh

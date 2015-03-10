@@ -7,7 +7,7 @@
 path=/home/ubuntu/HDP-amazon-scripts
 
 #set the address of the namenode 
-namenode_ip=$(sh ../hue/get_configuration_parameter.sh hdfs-site dfs.namenode.http-address | cut -d ":" -f 1);
+namenode_ip=$(sh $path/script/get_configuration_parameter.sh hdfs-site dfs.namenode.http-address | cut -d ":" -f 1);
 
 # set up the configuration (assumption is that the NN is in $namenode)
 ## set the logging folder
@@ -18,17 +18,20 @@ echo 'spark.master                     spark://localhost:7077'  | sudo tee --app
 
 
 #set the address of the RM 
-rm_ip=$(sh ../hue/get_configuration_parameter.sh yarn-site yarn.resourcemanager.hostname);
+rm_ip=$(sh $path/script/get_configuration_parameter.sh yarn-site yarn.resourcemanager.hostname);
 
 
 #get the RM host
 #copy the yarn configuration 
-sudo mkdir /hadoop
-sudo scp -r $rm_ip:/etc/hadoop/conf /hadoop 
-sudo chown -R ubuntu /hadoop
+if [ ! -d "/etc/hadoop/conf" ]; then
+
+sudo mkdir -p /etc/hadoop/conf
+sudo scp -r $rm_ip:/etc/hadoop/conf /etc/hadoop 
+
+fi
 
 #set YARN_CONF_DIR env variable
-echo 'YARN_CONF_DIR=/hadoop/conf' | sudo tee --append /etc/environment
+echo 'YARN_CONF_DIR=/etc/hadoop/conf' | sudo tee --append /etc/environment
 
 #get the nameof the cluster (removing \" when necessary)
 #cluster_name=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters" | jq '.items[0].Clusters.cluster_name');
@@ -53,7 +56,7 @@ ssh $namenode_ip "sudo -u hdfs hdfs dfs -chown ubuntu /user/ubuntu"
 #cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 > $SPARK_HOME/conf/slaves
 
 #set the address of the namenode 
-historyserver_ip=$(sh hue/get_configuration_parameter.sh yarn-site yarn.log.server.url | cut -d ":" -f 2 | cut -d "/" -f 3);
+historyserver_ip=$(sh $path/script/get_configuration_parameter.sh yarn-site yarn.log.server.url | cut -d ":" -f 2 | cut -d "/" -f 3);
 
 # set up the history server connection between YARN and SPARK
 echo "spark.yarn.historyServer.address 	       http://$historyserver_ip:8088" | sudo tee --append /etc/spark/conf/spark-defaults.conf
