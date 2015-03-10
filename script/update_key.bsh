@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #remove previous keys (if any)
-sed -i '/ubuntu/d' ./authorized_keys
+sed -i '/ubuntu/d' /home/ubuntu/.ssh/authorized_keys
 
 #append the public key in ~/id_rsa.pub into authorized_keys
 sudo cat /home/tempuser/id_rsa.pub | sudo tee -a /home/ubuntu/.ssh/authorized_keys
