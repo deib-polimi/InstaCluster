@@ -6,6 +6,7 @@ sed -i '/ubuntu/d' /home/ubuntu/.ssh/authorized_keys
 #append the public key in ~/id_rsa.pub into authorized_keys
 sudo cat /home/tempuser/id_rsa.pub | sudo tee -a /home/ubuntu/.ssh/authorized_keys
 sudo mv /home/tempuser/id_rsa /home/ubuntu/.ssh
+sudo mv /home/tempuser/id_rsa.pub /home/ubuntu/.ssh
 
 
 #remove tempuser from sudoers
