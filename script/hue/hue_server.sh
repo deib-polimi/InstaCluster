@@ -35,68 +35,68 @@ echo "Configuration updated, stopping services"
 
 #stopping services
 #HDFS
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop HDFS via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/HDFS"
-#YARN
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop YARN via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/YARN"
-#OOZIE
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop OOZIE via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/OOZIE"
-#MAPREDUCE2
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop MAPREDUCE2 via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/MAPREDUCE2"
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop HDFS via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/HDFS"
+# #YARN
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop YARN via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/YARN"
+# #OOZIE
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop OOZIE via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/OOZIE"
+# #MAPREDUCE2
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Stop MAPREDUCE2 via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "INSTALLED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/MAPREDUCE2"
 
-#wait until all services have been stopped
-wait=true
-while [ $wait = true ]
-do
-        #wait for 30 seconds
-                echo "waiting 30 seconds more..."
-        sleep 30
-        wait=false
+# #wait until all services have been stopped
+# wait=true
+# while [ $wait = true ]
+# do
+#         #wait for 30 seconds
+#                 echo "waiting 30 seconds more..."
+#         sleep 30
+#         wait=false
 
-        #check if all requests have been completed
-        for request in $(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests"| jq '.items[] |.Requests.id')
-        do
-                status=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests/"$request | jq '.Requests.request_status');
-                status="${status%\"}"
-                status="${status#\"}"
-                if [ $status != COMPLETED ]
-                 then
-                  wait=true
-                fi
-        done
-done
+#         #check if all requests have been completed
+#         for request in $(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests"| jq '.items[] |.Requests.id')
+#         do
+#                 status=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests/"$request | jq '.Requests.request_status');
+#                 status="${status%\"}"
+#                 status="${status#\"}"
+#                 if [ $status != COMPLETED ]
+#                  then
+#                   wait=true
+#                 fi
+#         done
+# done
 
-echo "restarting.."
+# echo "restarting.."
 
-#HDFS
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start HDFS via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/HDFS"
-#YARN
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start YARN via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/YARN"
-#OOZIE
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start OOZIE via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/OOZIE"
-#MAPREDUCE2
-curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start MAPREDUCE2 via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/MAPREDUCE2"
+# #HDFS
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start HDFS via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/HDFS"
+# #YARN
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start YARN via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/YARN"
+# #OOZIE
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start OOZIE via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/OOZIE"
+# #MAPREDUCE2
+# curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d '{"RequestInfo": {"context" :"Start MAPREDUCE2 via REST (updating hue configuration)"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' "http://master:8080/api/v1/clusters/"$cluster_name"/services/MAPREDUCE2"
 
-#wait until all services have been started
-wait=true
-while [ $wait = true ]
-do
-        #wait for 30 seconds
-                echo "waiting 30 seconds more..."
-        sleep 30
-        wait=false
+# #wait until all services have been started
+# wait=true
+# while [ $wait = true ]
+# do
+#         #wait for 30 seconds
+#                 echo "waiting 30 seconds more..."
+#         sleep 30
+#         wait=false
 
-        #check if all requests have been completed
-        for request in $(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests"| jq '.items[] |.Requests.id')
-        do
-                status=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests/"$request | jq '.Requests.request_status');
-                status="${status%\"}"
-                status="${status#\"}"
-                if [ $status != COMPLETED ]
-                 then
-                  wait=true
-                fi
-        done
-done
+#         #check if all requests have been completed
+#         for request in $(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests"| jq '.items[] |.Requests.id')
+#         do
+#                 status=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters/"$cluster_name"/requests/"$request | jq '.Requests.request_status');
+#                 status="${status%\"}"
+#                 status="${status#\"}"
+#                 if [ $status != COMPLETED ]
+#                  then
+#                   wait=true
+#                 fi
+#         done
+# done
 
 echo "Ambari configuration prepared for hue"
 echo "Configuring hue"
