@@ -39,6 +39,7 @@ sudo chown -R ubuntu /etc/spark
 sudo chmod -R +x /etc/spark/sbin 
 sudo chmod -R +x /etc/spark/bin
 
-sudo chmod -R a+x $path/spark
-sudo chmod -R a+x $path/hue
+sudo chmod -R a+x $path/script/spark
+sudo chmod -R a+x $path/script/hue
+sudo chmod -R a+x $path/resources/job-server/
  
