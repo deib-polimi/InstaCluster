@@ -1,4 +1,4 @@
 #!/bin/bash
 
 #start the slave
-sudo $SPARK_HOME/sbin/start-slave.sh
+$SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
