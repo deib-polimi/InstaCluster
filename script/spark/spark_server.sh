@@ -26,7 +26,8 @@ rm_ip=$(sh $path/script/get_configuration_parameter.sh yarn-site yarn.resourcema
 if [ ! -d "/etc/hadoop/conf" ]; then
 
 sudo mkdir -p /etc/hadoop/conf
-sudo scp -r $rm_ip:/etc/hadoop/conf /etc/hadoop 
+sudo chown ubuntu:ubuntu /etc/hadoop/conf
+scp -r $rm_ip:/etc/hadoop/conf /etc/hadoop 
 
 fi
 
@@ -45,15 +46,6 @@ echo 'YARN_CONF_DIR=/etc/hadoop/conf' | sudo tee --append /etc/environment
 #ansible $cluster_name -a "chmod -R +x /etc/spark/bin" --sudo
 #ansible $cluster_name -a "chmod -R +x /etc/spark/sbin" --sudo
 
-#create home folder (assumption, there exists at least 1 slave)
-#TODO: what if the user did not select hdfs? (some scripts need to have a check if HDFS is installed)
-
-#get the namenode host
-ssh $namenode_ip "sudo -u hdfs hdfs dfs -mkdir /user/ubuntu"
-ssh $namenode_ip "sudo -u hdfs hdfs dfs -chown ubuntu /user/ubuntu"
-
-#add the slaves to the spark configuration
-#cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f3 > $SPARK_HOME/conf/slaves
 
 #set the address of the namenode 
 historyserver_ip=$(sh $path/script/get_configuration_parameter.sh yarn-site yarn.log.server.url | cut -d ":" -f 2 | cut -d "/" -f 3);
