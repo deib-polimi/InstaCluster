@@ -34,7 +34,7 @@ echo 'spark.yarn.am.extraJavaOptions -Dhdp.version=2.2.0.0-2041'  | sudo tee --a
 
 ## set the Web server port
 echo 'SPARK_MASTER_WEBUI_PORT=8888'  | sudo tee --append /etc/spark/conf/spark-env.sh
-echo 'SPARK_MASTER_IP=master'  | sudo tee --append /etc/spark/conf/spark-env.sh
+
 
 #change ownership
 sudo chown -R ubuntu /etc/spark

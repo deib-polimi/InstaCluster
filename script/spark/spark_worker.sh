@@ -8,3 +8,4 @@ master=$(curl -u admin:admin  -H 'X-Requested-By: ambari' -X GET http://master:8
 
 #set up the driver url
 echo "spark.master                     spark://"$master":7077"  | sudo tee --append /etc/spark/conf/spark-defaults.conf
+echo "SPARK_MASTER_IP=$master"  | sudo tee --append /etc/spark/conf/spark-env.sh

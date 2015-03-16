@@ -52,3 +52,8 @@ historyserver_ip=$(sh $path/script/get_configuration_parameter.sh yarn-site yarn
 
 # set up the history server connection between YARN and SPARK
 echo "spark.yarn.historyServer.address 	       http://$historyserver_ip:8088" | sudo tee --append /etc/spark/conf/spark-defaults.conf
+
+local_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
+
+driver=$(cat /etc/hosts | grep $local_ip | cut -d " " -f2)
+echo "SPARK_MASTER_IP=$driver"  | sudo tee --append /etc/spark/conf/spark-env.sh
