@@ -14,5 +14,5 @@
 #check if any argument has been passed when creating the instance
 #copying the template file in the right plate
 path=/home/ubuntu/HDP-amazon-scripts
-bash $path/script/setup.bsh > $path/setup.log 2>&1
+sudo -u ubuntu bash $path/script/setup.bsh > $path/setup.log 2>&1
 exit 0
