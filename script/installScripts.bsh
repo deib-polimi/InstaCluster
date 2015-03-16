@@ -16,6 +16,7 @@ wget http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz
 tar -xvf spark-1.2.0-bin-hadoop2.4.tgz
 ## remove the archive
 rm spark-1.2.0-bin-hadoop2.4.tgz
+sudo rm -rf /etc/spark
 ## move to etc
 sudo mv spark-1.2.0-bin-hadoop2.4 /etc/spark
 ## set SPARK_HOME

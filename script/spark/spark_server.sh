@@ -24,7 +24,7 @@ rm_ip=$(sh $path/script/get_configuration_parameter.sh yarn-site yarn.resourcema
 #get the RM host
 #copy the yarn configuration 
 if [ ! -d "/etc/hadoop/conf" ]; then
-
+echo "downloading yarn configuration"
 sudo mkdir -p /etc/hadoop/conf
 sudo chown ubuntu:ubuntu /etc/hadoop/conf
 scp -r $rm_ip:/etc/hadoop/conf /etc/hadoop 
