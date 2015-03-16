@@ -93,7 +93,7 @@ echo "setting up Ambari to look at the new hostname"
 ansible $ansible_cluster_name -a "ambari-agent restart" --sudo
 
 echo "install ambari server and start it"
-wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
+sudo wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
 sudo mv ambari.list /etc/apt/sources.list.d/
 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD -y
 sudo apt-get update
