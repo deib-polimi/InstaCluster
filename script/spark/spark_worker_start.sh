@@ -6,5 +6,5 @@ master=$(curl -u admin:admin  -H 'X-Requested-By: ambari' -X GET http://master:8
 
 
 #start the slave
-$SPARK_HOME/bin/spark-class org.apache.spark.deploy.worker.Worker spark://$master:7077
+$SPARK_HOME/sbin/start-slave.sh 1 spark://$master:7077
 

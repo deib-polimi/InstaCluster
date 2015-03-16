@@ -1,4 +1,4 @@
 #!/bin/bash
 
-#start the slave
-sudo $SPARK_HOME/sbin/stop-slaves.sh
+#stop the slave
+$SPARK_HOME/sbin/spark-daemons.sh stop org.apache.spark.deploy.worker.Worker 1
