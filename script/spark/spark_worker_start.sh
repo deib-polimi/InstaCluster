@@ -7,4 +7,3 @@ master=$(curl -u admin:admin  -H 'X-Requested-By: ambari' -X GET http://master:8
 
 #start the slave
 $SPARK_HOME/sbin/start-slave.sh 1 spark://$master:7077
-
