@@ -42,6 +42,7 @@ do
 
     if [ -z $hostname ];
     then
+	noAmbari="true"
 	echo "no hostname tag found, adding slave $counter to the host file"
 	echo "$ip slave$counter" | sudo tee --append /etc/hosts
 	echo "setting the slave $counter tag"
@@ -109,6 +110,8 @@ echo "setting up Ambari to look at the new hostname"
 #restart the Ambari agent to reconnect to the master with the new hostname
 ansible $ansible_cluster_name -a "ambari-agent restart" --sudo
 
+if [ -z $noAmbari ]; then
+
 echo "install ambari server and start it"
 sudo wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
 sudo mv ambari.list /etc/apt/sources.list.d/
@@ -120,12 +123,10 @@ ambari="/var/lib/ambari-server/resources/stacks/HDP/2.2/services"
 sudo cp -r $path/resources/HUE $ambari
 sudo cp -r $path/resources/SPARK $ambari
 
-
 sudo ambari-server setup -j $JAVA_HOME -s
 
+else
 
-
+fi
 
 sudo ambari-server start
-
-
