@@ -109,7 +109,6 @@ echo "assigning slaves their hostname"
 
 echo "setting up Ambari to look at the new hostname"
 #restart the Ambari agent to reconnect to the master with the new hostname
-ansible $ansible_cluster_name -a "ambari-agent restart" --sudo
 
 if [ -z $noAmbari ]; then
 
@@ -126,8 +125,9 @@ sudo cp -r $path/resources/SPARK $ambari
 
 sudo ambari-server setup -j $JAVA_HOME -s
 
-else
 
 fi
 
-sudo ambari-server start
+sudo ambari-server restart
+sleep 10
+ansible $ansible_cluster_name -a "ambari-agent restart" --sudo

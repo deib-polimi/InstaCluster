@@ -15,12 +15,12 @@ sudo service ssh restart
 #add tempuser to sudoers
 echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
 
-echo "Installing ambari agent"
 
 noAmbari=$(dpkg -l | grep ambari-agent)
 
 if [ -z $noAmbari ]; then
 
+echo "Installing ambari agent"
 wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
 sudo mv ambari.list /etc/apt/sources.list.d/
 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD -y
@@ -28,5 +28,5 @@ sudo apt-get update
 sudo apt-get install -y ambari-agent
 sudo mv $path/resources/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini
 
-else
+
 fi
