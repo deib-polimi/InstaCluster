@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#tag the instance as a master
-ins_id=$(wget -q -O - http://169.254.169.254/latest/meta-data/instance-id)
-/usr/local/bin/aws ec2 create-tags --resource $ins_id --tag Key=type,Value=slave
-
 
 #creating the temporary user
 path=/home/ubuntu/HDP-amazon-scripts
@@ -20,9 +16,17 @@ sudo service ssh restart
 echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
 
 echo "Installing ambari agent"
+
+noAmbari=$(dpkg -l | grep ambari-agent)
+
+if [ -z $noAmbari ]; then
+
 wget http://public-repo-1.hortonworks.com/ambari/ubuntu12/1.x/updates/1.7.0/ambari.list
 sudo mv ambari.list /etc/apt/sources.list.d/
 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com B9733A7A07513CAD -y
 sudo apt-get update
 sudo apt-get install -y ambari-agent
 sudo mv $path/resources/ambari-agent.ini /etc/ambari-agent/conf/ambari-agent.ini
+
+else
+fi

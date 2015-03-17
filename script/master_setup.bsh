@@ -48,6 +48,7 @@ do
 	echo "setting the slave $counter tag"
 	slave_id=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.InstanceId)[]")
 	/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=hostname,Value=slave$counter
+	/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=type,Value=slave
 	counter=$((counter-1))
     else
 	sudo sed -i "/$hostname/d" /etc/hosts
