@@ -1,4 +1,16 @@
 #!/bin/bash
+
+#install hue
+sudo wget 'http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/cloudera.list' -O /etc/apt/sources.list.d/cloudera.list
+wget http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/archive.key -O archive.key
+sudo apt-key add archive.key
+sudo rm archive.key
+sudo apt-get update
+sudo apt-get install -y hue hue-server
+
+#TODO: if the Jobtraker is on another node we should install hue-plugins there (http://www.cloudera.com/content/cloudera/en/documentation/core/latest/topics/cdh_ig_hue_install.html)
+
+
 #get the nameof the cluster (removing \" when necessary)
 cluster_name=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters" | jq '.items[0].Clusters.cluster_name');
 cluster_name="${cluster_name%\"}"
@@ -100,6 +112,5 @@ echo "Configuration updated, stopping services"
 
 echo "Ambari configuration prepared for hue"
 echo "Configuring hue"
-
-sh hue_server_conf.sh
+bash $path/script/hue/hue_server_conf.sh
 
