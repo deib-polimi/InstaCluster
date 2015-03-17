@@ -4,7 +4,7 @@ path=/home/ubuntu/HDP-amazon-scripts
 
 #copy the template over the current configuration file
 hue_conf=/etc/hue/conf/hue.ini
-sudo cp /etc/hue/conf/hue.ini.template $hue_conf
+sudo cp $path/resources/hue.ini.template $hue_conf
 
 #set the address of the web server
 webserver_ip=master;

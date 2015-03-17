@@ -111,6 +111,5 @@ echo "Configuration updated, stopping services"
 # done
 
 echo "Ambari configuration prepared for hue"
-echo "Configuring hue"
 bash $path/script/hue/hue_server_conf.sh
 
