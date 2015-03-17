@@ -6,6 +6,11 @@ ansible_cluster_name="cluster";
 sudo cp /etc/hosts.template /etc/hosts.new
 echo "hosts template copied" 
 
+#tag the instance as a master
+ins_id=$(wget -q -O - http://169.254.169.254/latest/meta-data/instance-id)
+/usr/local/bin/aws ec2 create-tags --resource $ins_id --tag Key=type,Value=master
+
+
 #get the IP of the instance and update the host file
 local_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
 sudo sed "s/local_ip/$local_ip/" -i /etc/hosts.new
@@ -29,13 +34,25 @@ export
 slaves_ips=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(.PrivateIpAddress) | map(select(. != \"$local_ip\"))[]")
 echo "slaves_ips: $slaves_ips"
 #count the number of slaves to assign incremental names
-counter=1;
+counter=$(echo $slaves_ips | wc -w)
 #gets the IPs of the machines running in the same region and assign names as slaves. Updates the hosts file
 for ip in $slaves_ips;
 do
-        echo "adding slave $counter to the host file"
-		echo "$ip slave$counter" | sudo tee --append /etc/hosts		
-        counter=$((counter+1))		
+    hostname=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.Tags)[] | map(select(.Key==\"hostname\"))[].Value")
+
+    if [ -z $hostname ];
+    then
+	echo "no hostname tag found, adding slave $counter to the host file"
+	echo "$ip slave$counter" | sudo tee --append /etc/hosts
+	echo "setting the slave $counter tag"
+	slave_id=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.InstanceId)[]")
+	/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=hostname,Value=slave$counter
+	counter=$((counter-1))
+    else
+	sudo sed -i "/$hostname/d" /etc/hosts
+	echo "$ip $hostname" | sudo tee --append /etc/hosts
+    fi
+		
 done
 
 

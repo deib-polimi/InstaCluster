@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#tag the instance as a master
+ins_id=$(wget -q -O - http://169.254.169.254/latest/meta-data/instance-id)
+/usr/local/bin/aws ec2 create-tags --resource $ins_id --tag Key=type,Value=slave
+
+
 #creating the temporary user
 path=/home/ubuntu/HDP-amazon-scripts
 echo "creating temporary user"
