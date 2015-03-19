@@ -26,11 +26,13 @@
                 </osSpecific>
             </osSpecifics>
 	    <requiredServices>
-              <service>HDFS</service>
+          <service>HDFS</service>
 	      <service>YARN</service>
 	      <service>MAPREDUCE2</service>
 	      <service>OOZIE</service>
 	      <service>SPARK</service>
+		  <service>HBASE</service>
+		  <service>HIVE</service>
 	    </requiredServices>
 	    <configuration-dependencies>
               <config-type>core-site</config-type>
