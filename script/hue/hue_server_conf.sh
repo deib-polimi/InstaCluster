@@ -46,4 +46,4 @@ zookeeper_ensable=$(sh $path/script/get_configuration_parameter.sh hive-site hiv
 #echo $zookeeper_ensable
 sudo sed -i "s/ZOOKEEPER_ENSABLE/$zookeeper_ensable/g" $hue_conf
 
-#sudo service hue restart
+sudo service hue restart

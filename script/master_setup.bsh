@@ -5,7 +5,13 @@ ansible_cluster_name="cluster";
 #copy the template hosts file over the current hosts file
 sudo cp /etc/hosts.template /etc/hosts.new
 echo "hosts template copied" 
-
+#get the access keys  for aws console
+export AWS_ACCESS_KEY_ID=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
+export AWS_SECRET_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_ACCESS_KEY | cut -d "=" -f2)
+export AWS_DEFAULT_REGION=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_DEFAULT_REGION | cut -d "=" -f2)
+export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+echo "access key and secret key retrieved"
+export
 #tag the instance as a master
 ins_id=$(wget -q -O - http://169.254.169.254/latest/meta-data/instance-id)
 /usr/local/bin/aws ec2 create-tags --resource $ins_id --tag Key=type,Value=master
@@ -23,13 +29,7 @@ echo "fixed hosts applied"
 sudo bash $path/script/fixhostname.bsh master 
 echo "hostname fixed"
 
-#get the access keys  for aws console
-export AWS_ACCESS_KEY_ID=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
-export AWS_SECRET_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_ACCESS_KEY | cut -d "=" -f2)
-export AWS_DEFAULT_REGION=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_DEFAULT_REGION | cut -d "=" -f2)
-export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
-echo "access key and secret key retrieved"
-export
+
 #Get only machines running in the same region 
 slaves_ips=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(.PrivateIpAddress) | map(select(. != \"$local_ip\"))[]")
 echo "slaves_ips: $slaves_ips"
@@ -42,7 +42,7 @@ do
 
     if [ -z $hostname ];
     then
-	noAmbari="true"
+	noAmbari=""
 	echo "no hostname tag found, adding slave $counter to the host file"
 	echo "$ip slave$counter" | sudo tee --append /etc/hosts
 	echo "setting the slave $counter tag"
@@ -51,6 +51,7 @@ do
 	/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=type,Value=slave
 	counter=$((counter-1))
     else
+	noAmbari="false"
 	sudo sed -i "/$hostname/d" /etc/hosts
 	echo "$ip $hostname" | sudo tee --append /etc/hosts
     fi
