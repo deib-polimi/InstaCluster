@@ -29,11 +29,7 @@ fi
 pid="$SPARK_PID_DIR/spark-$SPARK_IDENT_STRING-$command-$instance.pid"
 
 if [ -f $pid ]; then
-    if kill -0 `cat $pid` > /dev/null 2>&1; then
-	echo "yes"
-    else
-	echo "no"
-    fi
+    cat $pid
 else
     echo "no"
 fi

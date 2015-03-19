@@ -11,7 +11,9 @@ class Slave(Script):
     subprocess.call("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_worker_start.sh", shell=True)
    
   def status(self, env):
-    print 'Status of the Sample Srv Slave';
+    status = subprocess.check_output("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_status.sh", shell=True)
+    check_process_status(status)
+  
   def configure(self, env):
     print 'Configure the Sample Srv Slave';
 if __name__ == "__main__":

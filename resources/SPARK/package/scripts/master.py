@@ -12,7 +12,9 @@ class Master(Script):
      
   def status(self, env):
     status = subprocess.check_output("/home/ubuntu/HDP-amazon-scripts/script/spark/spark_status.sh", shell=True)
-            
+    check_process_status(status)
+      
+    
   def configure(self, env):
     print 'Configure the Sample Srv Master';
 if __name__ == "__main__":
