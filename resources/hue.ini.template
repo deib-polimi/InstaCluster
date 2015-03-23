@@ -950,7 +950,7 @@
 
 [spark]
   # URL of the REST Spark Job Server.
-  server_url=http://SPARK_JOB_SERVER:8090/
+  server_url=http://SPARK_JOB_SERVER:8888/
 
 
 ###########################################################################
