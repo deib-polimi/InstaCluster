@@ -48,4 +48,10 @@ zookeeper_ensable=$(sh $path/script/get_configuration_parameter.sh hive-site hiv
 #echo $zookeeper_ensable
 sudo sed -i "s/ZOOKEEPER_ENSABLE/$zookeeper_ensable/g" $hue_conf
 
+#set the address of the zookeeper ensamble
+spark_job_server=$(sh $path/script/get_componen_host.sh SPARK SPARK_DRIVER);
+#echo $spark_job_server
+sudo sed -i "s/SPARK_JOB_SERVER/$spark_job_server/g" $hue_conf
+
+
 sudo service hue restart
