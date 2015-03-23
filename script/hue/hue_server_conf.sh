@@ -11,7 +11,7 @@ webserver_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
 webserver_port=8808
 #echo $webserver_ip
 sudo sed -i "s/WEB_SERVER_IP/$webserver_ip/g" $hue_conf
-sudo sed -i "s/WEB_SERVER_IP/$webserver_ip/g" $hue_conf
+sudo sed -i "s/WEB_SERVER_PORT/$webserver_port/g" $hue_conf
 
 #set the address of the namenode 
 namenode_ip=$(sh $path/script/get_configuration_parameter.sh hdfs-site dfs.namenode.http-address | cut -d ":" -f 1);

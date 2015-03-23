@@ -22,7 +22,7 @@
 
   # Webserver listens on this address and port
   http_host=WEB_SERVER_IP
-  http_port=WE_SERVER_PORT
+  http_port=WEB_SERVER_PORT
 
   # Time zone name
   time_zone=America/Los_Angeles
@@ -117,7 +117,7 @@
 
     # Top banner HTML code
     # e.g. <H2>Test Lab A2 Hue Services</H2>
-    banner_top_html=<H2>EC2 Hue Cluster</H2>
+    banner_top_html=<H3>EC2 Hue Cluster</H3>
 
   # Configuration options for user authentication into the web application
   # ------------------------------------------------------------------------
