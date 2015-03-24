@@ -1,5 +1,5 @@
 #!/bin/bash
-
+path=/home/ubuntu/HDP-amazon-scripts
 #get cluster name
 cluster_name=$(curl -s -u admin:admin -X GET  "http://master:8080/api/v1/clusters" | jq -r '.items[0].Clusters.cluster_name');
 
