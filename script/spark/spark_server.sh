@@ -11,10 +11,14 @@ namenode_ip=$(sh $path/script/get_configuration_parameter.sh hdfs-site dfs.namen
 
 # set up the configuration (assumption is that the NN is in $namenode)
 ## set the logging folder
-echo "spark.eventLog.dir               hdfs://$namenode_ip:8020/user/ubuntu/spark-app-logs" | sudo tee --append /etc/spark/conf/spark-defaults.conf
+echo "spark.eventLog.dir               hdfs://$namenode_ip:8020/spark-app-logs" | sudo tee --append /etc/spark/conf/spark-defaults.conf
+
+spark_job_server=$(sh $path/script/get_component_host.sh SPARK SPARK_DRIVER);
 
 #set up the driver url
-echo 'spark.master                     spark://localhost:7077'  | sudo tee --append /etc/spark/conf/spark-defaults.conf
+echo "spark.master                     spark://$spark_job_server:7077"  | sudo tee --append /etc/spark/conf/spark-defaults.conf
+
+sudo sed -i "s/SPARK_MASTER_HOST/$spark_job_server/g" /etc/spark/conf/spark-defaults.conf
 
 
 #set the address of the RM 

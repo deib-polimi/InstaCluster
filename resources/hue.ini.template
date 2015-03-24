@@ -861,7 +861,7 @@
 [hbase]
   # Comma-separated list of HBase Thrift servers for clusters in the format of '(name|host:port)'.
   # Use full hostname with security.
-  ## hbase_clusters=(Cluster|HBASE_MASTER_IP:9090)
+  hbase_clusters=(Cluster|HBASE_MASTER_IP:9090)
 
   # HBase configuration directory, where hbase-site.xml is located.
   ## hbase_conf_dir=/etc/hbase/conf
