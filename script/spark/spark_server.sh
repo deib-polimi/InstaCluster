@@ -61,3 +61,7 @@ local_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
 
 driver=$(cat /etc/hosts | grep $local_ip | cut -d " " -f2)
 echo "SPARK_MASTER_IP=$driver"  | sudo tee --append /etc/spark/conf/spark-env.sh
+#create the directory for standalone logs
+namenode_ip=$(sh $path/script/get_configuration_parameter.sh hdfs-site dfs.namenode.http-address | cut -d ":" -f 1);
+sudo -u ubuntu ssh $namenode_ip "sudo -u hdfs hdfs dfs -mkdir /spark-app-logs"
+sudo -u ubuntu ssh $namenode_ip "sudo -u hdfs hdfs dfs -chmod 777 /spark-app-logs"
