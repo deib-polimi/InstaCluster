@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Instacluster : Building A Big Data Cluster in Minutes">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Instacluster</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/deib-polimi/InstaCluster">View on GitHub</a>
+
+          <h1 id="project_title">Instacluster</h1>
+          <h2 id="project_tagline">Building A Big Data Cluster in Minutes</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/deib-polimi/InstaCluster/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/deib-polimi/InstaCluster/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="instacluster" class="anchor" href="#instacluster" aria-hidden="true"><span class="octicon octicon-link"></span></a>InstaCluster</h1>
+
+<h2>
+<a id="building-a-big-data-cluster-in-minutes" class="anchor" href="#building-a-big-data-cluster-in-minutes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building A Big Data Cluster in Minutes</h2>
+
+<p>InstaCluster is a tool for building a BigData analytic stack in minutes. 
+The tool is composed by a set of shell and python scripts plus some configuration template for the main supported services. 
+Thequickest way to use the tool is by launching the provided public Amazon Machine Image (AMI) with id: ami-e99171ad available in the N.California (us-west-1) region. </p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>In order to set up a cluster the user should spawn a number of <em>Slave</em> replicas of the provided AMI, specifying as user provided data your AWS_ACCES_KEY_ID only (follow the syntax shown in the example configuration file).</p>
+
+<p>After Slave instances have been created the user can spawn the <em>Master</em> instance, used to host the ambari server. When launching this instance the user should specify the following parameters:</p>
+
+<ul>
+<li>AWS_ACCESS_KEY_ID  - your aws access key needed to query aws about runnign instances and discover slaves</li>
+<li>AWS_SECRET_ACCESS_KEY - your aws secret key needed to query aws about runnign instances and discover slaves</li>
+<li>AWS_DEFAULT_REGION - the region in which to look for slaves</li>
+<li>REVOKE_KEYS - wether to revoke the key after the slave discovery (useful for many security reasons)</li>
+</ul>
+
+<p>An example of the parameters required for the configuration is: 
+    AWS_ACCESS_KEY_ID=498o37f08b9f2vjv0982
+    AWS_SECRET_ACCESS_KEY=n97375hf28047bv84075gfb128b8b7c21857b
+    AWS_DEFAULT_REGION=us-west-1
+    REVOKE_KEYS=No</p>
+
+<h2>
+<a id="services" class="anchor" href="#services" aria-hidden="true"><span class="octicon octicon-link"></span></a>Services</h2>
+
+<p>InstaCluster delegaes to Ambari the provisionign of services, for this reason all of the services supported by Ambari can be used, for a complete list of the servicese supported by Ambari please refer to the <a href="https://ambari.apache.org/">official documentation</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Instacluster maintained by <a href="https://github.com/deib-polimi">deib-polimi</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
