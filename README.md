@@ -2,7 +2,9 @@
 Scripts for the Amazon image that supports Ambari and Hue
 
 This repository contains the nessecary bash scripts and resources needed to set up Ambari/Hue-enabled cluster 
-using Amazon EC2 virtual machine (VM) instantces. They are embedded in the public amazon machine image (AMI) and 
+using Amazon EC2 virtual machine (VM) instantces.
+An AMI with pre-installed scripts is available in the us-west-1 region with id: ami-e99171ad
+They are embedded in the public amazon machine image (AMI) and 
 run in two phases:
 
 1. After booting the VM - to discover and configure all the VMs of the cluster to be able to communicate 
