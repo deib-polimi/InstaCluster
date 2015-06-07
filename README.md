@@ -12,6 +12,8 @@ among each other and start Ambari server and agents on the master and slaves, re
 2. After cluster installation - to set up Spark (standalone) and Hue to work togeather with the projects from the Hadoop ecosystem 
 installed by Ambari.
 
+A short video showing the cluster provisioning procoess [is available here](https://www.youtube.com/watch?v=Vqu0cjQ7M0w)
+
 ## Structure of the repository
 
 HDP-amazon-scripts/
@@ -72,6 +74,7 @@ To install the cluster spawn a number of replicas of the previously created mach
 giving as user provided data your AWS_ACCES_KEY_ID only (follow the syntax in sampleParameterFiles.txt).
 
 When machines have been started spawn another replica adding as user data a file with the same format of sampleParameterFiles.txt with the keys to access the aws cli tool. 
+
 
 ## Parameters needed for cluster installation
 
