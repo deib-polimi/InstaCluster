@@ -102,7 +102,7 @@ echo "assigning slaves their hostname"
 #if you don't understand this talk to Srdjan..
 #i don't 
 #do we really want this? for Web gui it is better to user AWS hostnames, if amabari setup manages to work with slave[1-n]
-#cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f2 | xargs -I J ssh J sudo bash $path/script/fixhostname.bsh  J
+cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f2 | xargs -I J ssh J sudo bash $path/script/fixhostname.bsh  J
 
 
 echo "setting up Ambari to look at the new hostname"
