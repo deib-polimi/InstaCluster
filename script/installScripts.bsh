@@ -1,7 +1,7 @@
 #!/bin/bash
 #run this to install the scripts in the proper place in a "clean VM" (requirements software have to be installed for scripts to work)
 
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ardagna/InstaCluster
 echo "REPO=$path" | sudo tee --append /etc/environment
 
 
@@ -45,3 +45,4 @@ sudo chmod -R a+x $path/script/spark
 sudo chmod -R a+x $path/script/hue
 sudo chmod -R a+x $path/resources/job-server/
  
+
