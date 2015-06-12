@@ -2,18 +2,18 @@
 
 
 #creating the temporary user
-path=/home/ubuntu/HDP-amazon-scripts
-echo "creating temporary user"
-AWS_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
-sudo useradd -d /home/tempuser -m tempuser
-echo "tempuser:$AWS_ACCESS_KEY" | sudo chpasswd
+path=/home/ardagna/InstaCluster
+#echo "creating temporary user"
+#AWS_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
+#sudo useradd -d /home/tempuser -m tempuser
+#echo "tempuser:$AWS_ACCESS_KEY" | sudo chpasswd
 
 #enable password autentication for ssh
-sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-sudo service ssh restart
+#sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+#sudo service ssh restart
 
 #add tempuser to sudoers
-echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
+#echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
 
 
 noAmbari=$(dpkg -l | grep ambari-agent)

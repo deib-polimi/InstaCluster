@@ -1,24 +1,29 @@
 #!/bin/bash
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ardagna/InstaCluster
 ansible_cluster_name="cluster";
 
 #copy the template hosts file over the current hosts file
 sudo cp /etc/hosts.template /etc/hosts.new
 echo "hosts template copied" 
 #get the access keys  for aws console
-export AWS_ACCESS_KEY_ID=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
-export AWS_SECRET_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_ACCESS_KEY | cut -d "=" -f2)
-export AWS_DEFAULT_REGION=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_DEFAULT_REGION | cut -d "=" -f2)
+#export AWS_ACCESS_KEY_ID=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
+#export AWS_SECRET_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_ACCESS_KEY | cut -d "=" -f2)
+#export AWS_DEFAULT_REGION=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_DEFAULT_REGION | cut -d "=" -f2)
 export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
-echo "access key and secret key retrieved"
+#echo "access key and secret key retrieved"
 export
 #tag the instance as a master
-ins_id=$(wget -q -O - http://169.254.169.254/latest/meta-data/instance-id)
-/usr/local/bin/aws ec2 create-tags --resource $ins_id --tag Key=type,Value=master
+
+local_ip=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+
+#ins_id=$(wget -q -O - http://169.254.169.254/latest/meta-data/instance-id)
+ins_id=$(nmap -sP 192.168.213.0/24 | grep report |egrep -v "213.1$"| egrep -v "213.2$" |egrep -v $local_ip | cut -d " " -f 5)
+
+#/usr/local/bin/aws ec2 create-tags --resource $ins_id --tag Key=type,Value=master
 
 
 #get the IP of the instance and update the host file
-local_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
+#local_ip=$(wget -qO- http://instance-data/latest/meta-data/local-ipv4)
 sudo sed "s/local_ip/$local_ip/" -i /etc/hosts.new
 echo "master IP updated on hosts file"
 
@@ -31,36 +36,28 @@ echo "hostname fixed"
 
 
 #Get only machines running in the same region 
-slaves_ips=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(.PrivateIpAddress) | map(select(. != \"$local_ip\"))[]")
-echo "slaves_ips: $slaves_ips"
+slaves_ips=$ins_id
 #count the number of slaves to assign incremental names
 counter=$(echo $slaves_ips | wc -w)
 #gets the IPs of the machines running in the same region and assign names as slaves. Updates the hosts file
 for ip in $slaves_ips;
 do
-    hostname=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.Tags)[] | map(select(.Key==\"hostname\"))[].Value")
+    #hostname=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.Tags)[] | map(select(.Key==\"hostname\"))[].Value")
 
-    if [ -z $hostname ];
-    then
-	noAmbari=""
-	echo "no hostname tag found, adding slave $counter to the host file"
-	echo "$ip slave$counter" | sudo tee --append /etc/hosts
-	echo "setting the slave $counter tag"
-	slave_id=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.InstanceId)[]")
-	/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=hostname,Value=slave$counter
-	/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=type,Value=slave
-	counter=$((counter-1))
-    else
-	noAmbari="false"
-	sudo sed -i "/$hostname/d" /etc/hosts
-	echo "$ip $hostname" | sudo tee --append /etc/hosts
-    fi
-		
+    noAmbari=""
+    echo "no hostname tag found, adding slave $counter to the host file"
+    echo "$ip slave$counter" | sudo tee --append /etc/hosts
+    echo "setting the slave $counter tag"
+    #slave_id=$(/usr/local/bin/aws ec2 describe-instances | jq -r ".Reservations[].Instances | map(select(.State.Name==\"running\")) | map(select(.PrivateIpAddress==\"$ip\")) | map(.InstanceId)[]")
+    #/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=hostname,Value=slave$counter
+    #/usr/local/bin/aws ec2 create-tags --resource $slave_id --tag Key=type,Value=slave
+    counter=$((counter-1))
+ 		
 done
 
 
 #remove the known_hosts file
-sudo rm /etc/ssh/ssh_known_hosts
+#sudo rm /etc/ssh/ssh_known_hosts
 
 #populate the Ansible configuration file
 echo "[$ansible_cluster_name]" | sudo tee --append /etc/ansible/hosts
@@ -68,38 +65,38 @@ cat /etc/hosts | grep slave | grep -v \#  | cut -d " " -f2  | sudo tee -a /etc/a
 echo "updated Ansible configuration"
 
 #add slaves SSH fingerprints to the known hosts to allow Ansible automatic interactions
-cat /etc/hosts | grep slave |  grep -v \#  |  xargs ssh-keyscan -H -t ecdsa | sudo tee -a /etc/ssh/ssh_known_hosts
-echo "updated fingerprints of slaves"
+#cat /etc/hosts | grep slave |  grep -v \#  |  xargs ssh-keyscan -H -t ecdsa | sudo tee -a /etc/ssh/ssh_known_hosts
+#echo "updated fingerprints of slaves"
 
 #create the new keypair and put it in the ubuntu user
-ssh-keygen -t rsa -N "" -f /home/ubuntu/id_rsa
-sudo mv /home/ubuntu/id_rsa /home/ubuntu/.ssh/id_rsa
-sudo mv /home/ubuntu/id_rsa.pub /home/ubuntu/.ssh/id_rsa.pub
+#ssh-keygen -t rsa -N "" -f /home/ubuntu/id_rsa
+#sudo mv /home/ubuntu/id_rsa /home/ubuntu/.ssh/id_rsa
+#sudo mv /home/ubuntu/id_rsa.pub /home/ubuntu/.ssh/id_rsa.pub
 
 #copy over to slaves the public key and update the authorized keys with the script. It also removes the temporary user
-echo "copying and installing public key to slaves"
-for slave in $(cat /etc/hosts | grep slave |  grep -v \# | cut -d " " -f2) 
-do
-	echo "working with $slave"
-	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/tempuser/id_rsa.pub
-	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa tempuser@$slave:/home/tempuser/id_rsa
-	sshpass -p "$AWS_ACCESS_KEY_ID" ssh  tempuser@$slave sudo bash $path/script/update_key.bsh
-done
+#echo "copying and installing public key to slaves"
+#for slave in $(cat /etc/hosts | grep slave |  grep -v \# | cut -d " " -f2) 
+#do
+#	echo "working with $slave"
+#	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa.pub tempuser@$slave:/home/tempuser/id_rsa.pub
+#	sudo sshpass -p "$AWS_ACCESS_KEY_ID" scp /home/ubuntu/.ssh/id_rsa tempuser@$slave:/home/tempuser/id_rsa
+#	sshpass -p "$AWS_ACCESS_KEY_ID" ssh  tempuser@$slave sudo bash $path/script/update_key.bsh
+#done
 
 #revoke the keys (if selected by the user)
-revoke_decision=$(wget -qO- http://instance-data/latest/user-data/ | grep REVOKE_KEYS | cut -d "=" -f2)
-if [ $revoke_decision = "Yes" ]
-then
- /usr/local/bin/aws iam delete-access-key --access-key-id $AWS_ACCESS_KEY_ID
-fi
+#revoke_decision=$(wget -qO- http://instance-data/latest/user-data/ | grep REVOKE_KEYS | cut -d "=" -f2)
+#if [ $revoke_decision = "Yes" ]
+#then
+# /usr/local/bin/aws iam delete-access-key --access-key-id $AWS_ACCESS_KEY_ID
+#fi
 
-echo "distributing host file"
+#echo "distributing host file"
 #distribute the hosts file to slaves to fix ips
 ansible $ansible_cluster_name -m copy -a "src=/etc/hosts dest=/etc/hosts" --sudo
 
 echo "distributing fingerprints"
 #distribute the  known host file so that everyone knows the correct fingerprints
-ansible $ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc/ssh/ssh_known_hosts" --sudo
+#ansible $ansible_cluster_name -m copy -a "src=/etc/ssh/ssh_known_hosts dest=/etc/ssh/ssh_known_hosts" --sudo
 
 echo "assigning slaves their hostname"
 #if you don't understand this talk to Srdjan..
