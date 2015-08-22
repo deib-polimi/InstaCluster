@@ -6,7 +6,7 @@ APP_USER=ubuntu
 APP_GROUP=hadoop
 # optional SSH Key to login to deploy server
 #SSH_KEY=/path/to/keyfile.pem
-INSTALL_DIR=/home/ubuntu/HDP-amazon-scripts/resources/job-server
+INSTALL_DIR=/home/ubuntu/InstaCluster/resources/job-server
 LOG_DIR=/var/log/job-server
 PIDFILE=spark-jobserver.pid
 SPARK_HOME=/etc/spark

@@ -1,7 +1,7 @@
 
 
 #depends on the stack version selected by the user
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ubuntu/InstaCluster
 ambari="/var/lib/ambari-server/resources/stacks/HDP/2.2/services"
 
 sudo cp -r $path/resources/HUE $ambari

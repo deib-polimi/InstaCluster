@@ -1,4 +1,4 @@
-# HDP-amazon-scripts
+# InstaCluster
 Scripts for the Amazon image that supports Ambari and Hue
 
 This repository contains the nessecary bash scripts and resources needed to set up Ambari/Hue-enabled cluster 
@@ -16,7 +16,7 @@ A short video showing the cluster provisioning procoess [is available here](http
 
 ## Structure of the repository
 
-HDP-amazon-scripts/
+InstaCluster/
 
   scripts/
   
