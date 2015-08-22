@@ -11,7 +11,7 @@ sudo cp -f $path/script/rc.local /etc/
 sudo cp -rf $path/resources/job-server /etc/
 
 ## download spark
-wget http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz
+wget http://d3kbcqa49mib13.cloudfront.net/spark-1.4.1-bin-hadoop2.6.tgz
 ## extract it
 tar -xvf spark-1.2.0-bin-hadoop2.4.tgz
 ## remove the archive
