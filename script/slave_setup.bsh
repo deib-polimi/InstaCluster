@@ -16,7 +16,7 @@ sudo service ssh restart
 echo "tempuser ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/90-cloudimg-ubuntu
 
 
-noAmbari=$(dpkg -l | grep ambari-agent)
+noAmbari=$(dpkg -l | grep ambari-agent | cut -d " " -f2 )
 
 if [ -z $noAmbari ]; then
 
