@@ -1,5 +1,5 @@
 #!/bin/bash
-path=/home/ardagna/InstaCluster
+path=/home/ubuntu/InstaCluster
 ansible_cluster_name="cluster";
 
 #copy the template hosts file over the current hosts file

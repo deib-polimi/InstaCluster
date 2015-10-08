@@ -2,7 +2,7 @@
 
 
 #creating the temporary user
-path=/home/ardagna/InstaCluster
+path=/home/ubuntu/InstaCluster
 #echo "creating temporary user"
 #AWS_ACCESS_KEY=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_ACCESS_KEY_ID | cut -d "=" -f2)
 #sudo useradd -d /home/tempuser -m tempuser

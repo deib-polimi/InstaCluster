@@ -1,6 +1,6 @@
 echo "Configuring hue"
 
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ubuntu/InstaCluster
 
 #copy the template over the current configuration file
 hue_conf=/etc/hue/conf/hue.ini

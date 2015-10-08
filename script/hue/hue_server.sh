@@ -19,7 +19,7 @@ echo "Cluster name detected from Ambari:"$cluster_name
 
 #exporting in the path the script to manipulate ambari configuration
 #PATH=$PATH:/var/lib/ambari-server/resources/scripts
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ubuntu/InstaCluster
 
 
 #modifying core-site

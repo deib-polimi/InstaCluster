@@ -1,6 +1,6 @@
 #!/bin/bash
 #discriminate if slave or master by user provided meta-data when launching the instance
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ubuntu/InstaCluster
 arguments=$(wget -qO- http://instance-data/latest/user-data/ | grep AWS_SECRET_ACCESS_KEY)
 if [ -z "$arguments" ]; then
   echo "I'm a Slave Instance"

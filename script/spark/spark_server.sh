@@ -4,7 +4,7 @@
 # NOT TESTED #
 ##############
 
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ubuntu/InstaCluster
 
 #set the address of the namenode 
 namenode_ip=$(sh $path/script/get_configuration_parameter.sh hdfs-site dfs.namenode.http-address | cut -d ":" -f 1);

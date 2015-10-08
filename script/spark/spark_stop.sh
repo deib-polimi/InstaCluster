@@ -1,6 +1,6 @@
 #!/bin/bash
 
-path=/home/ubuntu/HDP-amazon-scripts
+path=/home/ubuntu/InstaCluster
 
 #start the master and the slaves
 sudo $SPARK_HOME/sbin/stop-master.sh
